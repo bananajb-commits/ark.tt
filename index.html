@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>アークナイツ・オペレーター診断クイズ</title>
+    <title>アークナイツ・オペレータークイズ修正版</title>
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
-            background-color: #0f0f0f;
-            color: #cfcfcf;
+            background-color: #0d0d0d;
+            color: #d0d0d0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,9 +17,9 @@
         }
         .container {
             background-color: #1a1a1a;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8);
             width: 95%;
             max-width: 500px;
             text-align: center;
@@ -34,7 +34,7 @@
             width: 100%;
             padding: 20px;
             margin: 10px 0;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
             cursor: pointer;
             border-radius: 8px;
@@ -63,7 +63,7 @@
         }
         .label { color: #00aaff; font-size: 0.8rem; font-weight: bold; }
         .value { color: #fff; font-weight: bold; }
-        .hidden-val { color: #333; }
+        .hidden-val { color: #222; background: #222; border-radius: 2px; }
 
         .answer-box {
             margin-top: 15px;
@@ -72,6 +72,7 @@
             color: #ffcc00;
             font-weight: bold;
             text-align: center;
+            text-shadow: 0 0 10px rgba(255,204,0,0.5);
         }
 
         .button-grid {
@@ -97,6 +98,7 @@
             color: #ffcc00;
             border: 1px solid #8a6d00;
             font-weight: bold;
+            margin-top: 5px;
         }
         .btn-control {
             grid-column: span 2;
@@ -114,21 +116,21 @@
 
 <div class="container">
     <div id="mode-select">
-        <h1>レア度を選択してください</h1>
-        <button class="rarity-btn btn-star6" onclick="startQuiz(6)">★6 クイズを開始</button>
-        <button class="rarity-btn btn-star5" onclick="startQuiz(5)">★5 クイズを開始</button>
+        <h1>レア度を選択</h1>
+        <button class="rarity-btn btn-star6" onclick="startQuiz(6)">★6 クイズ</button>
+        <button class="rarity-btn btn-star5" onclick="startQuiz(5)">★5 クイズ</button>
     </div>
 
     <div id="quiz-area">
-        <h1 id="quiz-title">★? オペレータークイズ</h1>
+        <h1 id="quiz-title">★? クイズ</h1>
         <div class="display-panel">
             <div class="info-row"><span class="label">職種</span><span id="res-job" class="value hidden-val">？？？</span></div>
             <div class="info-row"><span class="label">種族</span><span id="res-race" class="value hidden-val">？？？</span></div>
             <div class="info-row"><span class="label">性別</span><span id="res-gender" class="value hidden-val">？？？</span></div>
             <div class="info-row"><span class="label">ブロック数</span><span id="res-block" class="value hidden-val">？？？</span></div>
-            <div class="info-row"><span class="label">限定か否か</span><span id="res-limited" class="value hidden-val">？？？</span></div>
+            <div class="info-row"><span class="label">限定</span><span id="res-limited" class="value hidden-val">？？？</span></div>
             <div class="info-row"><span class="label">出身地</span><span id="res-origin" class="value hidden-val">？？？</span></div>
-            <div class="info-row"><span class="label">武器の種類</span><span id="res-weapon" class="value hidden-val">？？？</span></div>
+            <div class="info-row"><span class="label">武器</span><span id="res-weapon" class="value hidden-val">？？？</span></div>
             <div class="answer-box" id="res-name"></div>
         </div>
 
@@ -137,7 +139,7 @@
             <button class="hint-btn" onclick="reveal('race')">種族を表示</button>
             <button class="hint-btn" onclick="reveal('gender')">性別を表示</button>
             <button class="hint-btn" onclick="reveal('block')">ブロック数を表示</button>
-            <button class="hint-btn" onclick="reveal('limited')">限定か否かを表示</button>
+            <button class="hint-btn" onclick="reveal('limited')">限定か表示</button>
             <button class="hint-btn" onclick="reveal('origin')">出身地を表示</button>
             <button class="hint-btn" onclick="reveal('weapon')">武器を表示</button>
             <button class="hint-btn btn-reveal" onclick="reveal('name')">答えを表示</button>
@@ -148,121 +150,137 @@
 </div>
 
 <script>
-const operators = [
-    // ★6データ
-    { rarity: 6, name: "ウィシャデル", job: "狙撃", race: "サルカズ", block: "1", limited: "限定(祭)", origin: "カズデル", weapon: "投擲爆発物", gender: "女性" },
-    { rarity: 6, name: "ロゴス", job: "術師", race: "サルカズ", block: "1", limited: "恒常", origin: "カズデル", weapon: "術式具/杖", gender: "男性" },
-    { rarity: 6, name: "ウルピアヌス", job: "前衛", race: "エーギル", block: "2", limited: "恒常", origin: "エーギル", weapon: "巨大錨", gender: "男性" },
-    { rarity: 6, name: "ペペ", job: "前衛", race: "フェリーン", block: "2", limited: "限定(宴)", origin: "サルゴン", weapon: "巨大ハンマー", gender: "女性" },
-    { rarity: 6, name: "ナランツヤ", job: "狙撃", race: "イトラ", block: "1", limited: "恒常", origin: "サルゴン", weapon: "旋輪射手", gender: "女性" },
-    { rarity: 6, name: "荒蕪ラップランド", job: "術師", race: "ループス", block: "1", limited: "限定(祝)", origin: "シラクーザ", weapon: "投剣/アーツ", gender: "女性" },
-    { rarity: 6, name: "新約エクシア", job: "特殊", race: "サンクタ", block: "1", limited: "限定(祝)", origin: "ラテラーノ", weapon: "守護銃(複数)", gender: "女性" },
-    { rarity: 6, name: "斬業ホシグマ", job: "重装", race: "オニ", block: "3", limited: "限定(祝)", origin: "龍門", weapon: "般若(盾)/斧", gender: "女性" },
-    { rarity: 6, name: "アスカロン", job: "特殊", race: "サルカズ", block: "0", limited: "恒常", origin: "カズデル", weapon: "隠し刃", gender: "女性" },
-    { rarity: 6, name: "シヴィライト・エテルナ", job: "補助", race: "サルカズ", block: "0", limited: "配布(メイン)", origin: "カズデル", weapon: "王冠(アーツ)", gender: "女性" },
-    { rarity: 6, name: "シュウ", job: "重装", race: "歳", block: "3", limited: "限定(宴)", origin: "炎国", weapon: "禾(農具)/盾", gender: "女性" },
-    { rarity: 6, name: "ズオ・ラ", job: "前衛", race: "リーベリ", block: "1", limited: "恒常", origin: "炎国", weapon: "刀", gender: "男性" },
-    { rarity: 6, name: "レイ", job: "狙撃", race: "イトラ", block: "1(昇進後2)", limited: "恒常", origin: "リム・ビリトン", weapon: "サンドカセット銃", gender: "女性" },
-    { rarity: 6, name: "デーゲンブレヒャー", job: "前衛", race: "カプリニー", block: "2", limited: "恒常", origin: "イェラグ", weapon: "双剣", gender: "女性" },
-    { rarity: 6, name: "ヴィルトゥオーサ", job: "補助", race: "サンクタ", block: "1", limited: "限定(祝)", origin: "ラテラーノ", weapon: "チェロ", gender: "女性" },
-    { rarity: 6, name: "ヴィヴィアナ", job: "前衛", race: "エラフィア", block: "2", limited: "恒常", origin: "カジミエーシュ", weapon: "剣(アーツ)", gender: "女性" },
-    { rarity: 6, name: "レッシング", job: "前衛", race: "カプリニー", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "大剣", gender: "男性" },
-    { rarity: 6, name: "ホルハイヤ", job: "術師", race: "リベリ", block: "1", limited: "恒常", origin: "クルビア", weapon: "杖", gender: "女性" },
-    { rarity: 6, name: "ミュルジス", job: "先鋒", race: "エルフ", block: "1", limited: "限定(祭)", origin: "クルビア", weapon: "水のアーツ", gender: "女性" },
-    { rarity: 6, name: "イネス", job: "先鋒", race: "サルカズ", block: "2", limited: "恒常", origin: "カズデル", weapon: "影の剣", gender: "女性" },
-    { rarity: 6, name: "チョンユエ", job: "前衛", race: "歳", block: "1", limited: "限定(宴)", origin: "炎国", weapon: "拳", gender: "男性" },
-    { rarity: 6, name: "リン", job: "術師", race: "ザラック", block: "1", limited: "恒常", origin: "龍門", weapon: "宝石(アーツ)", gender: "女性" },
-    { rarity: 6, name: "焔影リード", job: "医療", race: "ドラコ", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "杖", gender: "女性" },
-    { rarity: 6, name: "血掟テキサス", job: "特殊", race: "ループス", block: "1", limited: "限定(祝)", origin: "シラクーザ", weapon: "双剣", gender: "女性" },
-    { rarity: 6, name: "ペナンス", job: "重装", race: "ループス", block: "3", limited: "恒常", origin: "シラクーザ", weapon: "裁判槌", gender: "女性" },
-    { rarity: 6, name: "ムリナール", job: "前衛", race: "クランタ", block: "0", limited: "恒常", origin: "カジミエーシュ", weapon: "剣(未抜刀)", gender: "男性" },
-    { rarity: 6, name: "百錬ガヴィル", job: "前衛", race: "アダクリス", block: "3", limited: "限定(祭)", origin: "サルゴン", weapon: "チェーンソー", gender: "女性" },
-    { rarity: 6, name: "パゼオンカ", job: "狙撃", race: "ループス", block: "1", limited: "恒常", origin: "ウルサス", weapon: "弩", gender: "女性" },
-    { rarity: 6, name: "帰溟スペクター", job: "特殊", race: "エーギル", block: "2", limited: "限定(祭)", origin: "エーギル", weapon: "丸ノコ", gender: "女性" },
-    { rarity: 6, name: "アイリーニ", job: "前衛", race: "リベリ", block: "2", limited: "恒常", origin: "イベリア", weapon: "剣/ハンドカノン", gender: "女性" },
-    { rarity: 6, name: "ホルン", job: "重装", race: "ペロ", block: "3", limited: "恒常", origin: "ヴィクトリア", weapon: "銃槍/盾", gender: "女性" },
-    { rarity: 6, name: "リィン", job: "補助", race: "歳", block: "1", limited: "限定(宴)", origin: "炎国", weapon: "召喚物/剣", gender: "女性" },
-    { rarity: 6, name: "ゴールデングロー", job: "術師", race: "フェリーン", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "杖", gender: "女性" },
-    { rarity: 6, name: "ノーシス", job: "補助", race: "イトラ", block: "1", limited: "恒常", origin: "イェラグ", weapon: "杖", gender: "男性" },
-    { rarity: 6, name: "耀騎士ニアール", job: "前衛", race: "クランタ", block: "1", limited: "限定(祝)", origin: "カジミエーシュ", weapon: "ランス", gender: "女性" },
-    { rarity: 6, name: "サイラッハ", job: "先鋒", race: "ヴイーヴル", block: "2", limited: "恒常", origin: "ヴィクトリア", weapon: "旗/槍", gender: "女性" },
-    { rarity: 6, name: "遊龍チェン", job: "狙撃", race: "龍", block: "1", limited: "限定(祭)", origin: "龍門", weapon: "水鉄砲", gender: "女性" },
-    { rarity: 6, name: "ミヅキ", job: "特殊", race: "エーギル", block: "0", limited: "恒常", origin: "東", weapon: "触手/武器", gender: "男性" },
-    { rarity: 6, name: "パラス", job: "前衛", race: "フォルテ", block: "2", limited: "恒常", origin: "ミノス", weapon: "鞭槍", gender: "女性" },
-    { rarity: 6, name: "ケルシー", job: "医療", race: "非公開", block: "1", limited: "恒常", origin: "不明", weapon: "Mon3tr", gender: "女性" },
-    { rarity: 6, name: "濁心スカジ", job: "補助", race: "エーギル", block: "1", limited: "限定(祭)", origin: "エーギル", weapon: "杖/歌", gender: "女性" },
-    { rarity: 6, name: "グレイディーア", job: "特殊", race: "エーギル", block: "2", limited: "配布(イベ)", origin: "エーギル", weapon: "大鎌", gender: "女性" },
-    { rarity: 6, name: "パッセンジャー", job: "術師", race: "リベリ", block: "1", limited: "恒常", origin: "クルビア", weapon: "杖", gender: "男性" },
-    { rarity: 6, name: "サガ", job: "先鋒", race: "ペロ", block: "2", limited: "恒常", origin: "東", weapon: "薙刀", gender: "女性" },
-    { rarity: 6, name: "シー", job: "術師", race: "歳", block: "1", limited: "限定(宴)", origin: "炎国", weapon: "筆/剣", gender: "女性" },
-    { rarity: 6, name: "マウンテン", job: "前衛", race: "フェリーン", block: "1", limited: "恒常", origin: "クルビア", weapon: "拳", gender: "男性" },
-    { rarity: 6, name: "マドロック", job: "重装", race: "サルカズ", block: "3", limited: "恒常", origin: "カズデル", weapon: "巨大ハンマー", gender: "女性" },
-    { rarity: 6, name: "ロスモンティス", job: "狙撃", race: "フェリーン", block: "2", limited: "限定(祝)", origin: "クルビア", weapon: "巨大端末", gender: "女性" },
-    { rarity: 6, name: "ブレミシャイン", job: "重装", race: "クランタ", block: "3", limited: "恒常", origin: "カジミエーシュ", weapon: "剣/盾", gender: "女性" },
-    { rarity: 6, name: "スルト", job: "前衛", race: "サルカズ", block: "1", limited: "恒常", origin: "不明", weapon: "両手剣", gender: "女性" },
-    { rarity: 6, name: "ユーネクテス", job: "重装", race: "アダクリス", block: "1", limited: "恒常", origin: "サルゴン", weapon: "巨大メカ", gender: "女性" },
-    { rarity: 6, name: "ソーンズ", job: "前衛", race: "エーギル", block: "2", limited: "恒常", origin: "イベリア", weapon: "剣", gender: "男性" },
-    { rarity: 6, name: "スズラン", job: "補助", race: "ヴァループス", block: "1", limited: "恒常", origin: "シラクーザ", weapon: "杖", gender: "女性" },
-    { rarity: 6, name: "W", job: "狙撃", race: "サルカズ", block: "1", limited: "限定(祭)", origin: "カズデル", weapon: "銃/爆弾", gender: "女性" },
-    { rarity: 6, name: "ウィーディ", job: "特殊", race: "エーギル", block: "2", limited: "恒常", origin: "イベリア", weapon: "液体窒素砲", gender: "女性" },
-    { rarity: 6, name: "ファントム", job: "特殊", race: "ループス", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "短剣", gender: "男性" },
-    { rarity: 6, name: "バグパイプ", job: "先鋒", race: "ヴイーヴル", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "破城槍", gender: "女性" },
-    { rarity: 6, name: "ケオベ", job: "術師", race: "ペロ", block: "1", limited: "恒常", origin: "ミノス", weapon: "投げナイフ/斧", gender: "女性" },
-    { rarity: 6, name: "ニェン", job: "重装", race: "歳", block: "3", limited: "限定(宴)", origin: "炎国", weapon: "盾", gender: "女性" },
-    { rarity: 6, name: "ア", job: "特殊", race: "龍", block: "1", limited: "恒常", origin: "龍門", weapon: "銃(注射)", gender: "男性" },
-    { rarity: 6, name: "ブレイズ", job: "前衛", race: "フェリーン", block: "3", limited: "恒常", origin: "龍門", weapon: "チェーンソー", gender: "女性" },
-    { rarity: 6, name: "モスティマ", job: "術師", race: "サンクタ", block: "1", limited: "恒常", origin: "ラテラーノ", weapon: "杖", gender: "女性" },
-    { rarity: 6, name: "マゼラン", job: "補助", race: "リベリ", block: "1", limited: "恒常", origin: "クルビア", weapon: "ドローン", gender: "女性" },
-    { rarity: 6, name: "ヘラグ", job: "前衛", race: "リベリ", block: "1", limited: "恒常", origin: "ウルサス", weapon: "刀", gender: "男性" },
-    { rarity: 6, name: "シュヴァルツ", job: "狙撃", race: "フェリーン", block: "1", limited: "恒常", origin: "シラクーザ", weapon: "巨大クロスボウ", gender: "女性" },
-    { rarity: 6, name: "チェン", job: "前衛", race: "龍", block: "2", limited: "恒常", origin: "龍門", weapon: "剣(赤霄)", gender: "女性" },
-    { rarity: 6, name: "スカジ", job: "前衛", race: "エーギル", block: "1", limited: "恒常", origin: "エーギル", weapon: "大剣", gender: "女性" },
-    { rarity: 6, name: "シルバーアッシュ", job: "前衛", race: "イトラ", block: "2", limited: "恒常", origin: "イェラグ", weapon: "仕込み杖", gender: "男性" },
-    { rarity: 6, name: "サリア", job: "重装", race: "ヴイーヴル", block: "3", limited: "恒常", origin: "クルビア", weapon: "盾", gender: "女性" },
-
-    // ★5データ
-    { rarity: 5, name: "アーミヤ(前衛)", job: "前衛", race: "キメラ", block: "1→2", limited: "配布(メイン)", origin: "リム・ビリトン", weapon: "剣(赤霄の影)", gender: "女性" },
-    { rarity: 5, name: "ラップランド", job: "前衛", race: "ループス", block: "1", limited: "恒常", origin: "シラクーザ", weapon: "双剣", gender: "女性" },
-    { rarity: 5, name: "スペクター", job: "前衛", race: "エーギル", block: "2", limited: "恒常", origin: "エーギル", weapon: "丸ノコ", gender: "男性" },
-    { rarity: 5, name: "ブローカ", job: "前衛", race: "フェリーン", block: "2", limited: "恒常", origin: "シラクーザ", weapon: "ドリル", gender: "男性" },
-    { rarity: 5, name: "サベージ", job: "前衛", race: "イーラ", block: "2", limited: "配布(イベ)", origin: "リム・ビリトン", weapon: "巨大な槌", gender: "女性" },
-    { rarity: 5, name: "エンカク", job: "前衛", race: "サルカズ", block: "1", limited: "配布(イベ)", origin: "カズデル", weapon: "刀", gender: "男性" },
-    { rarity: 5, name: "インドラ", job: "前衛", race: "フェリーン", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "ナックル", gender: "女性" },
-    { rarity: 5, name: "フランカ", job: "前衛", race: "ヴァループス", block: "1", limited: "恒常", origin: "ブラックスチール", weapon: "剣/レイピア", gender: "女性" },
-    { rarity: 5, name: "バイビーク", job: "前衛", race: "リーベリ", block: "2", limited: "配布(イベ)", origin: "サルゴン", weapon: "裁縫剣", gender: "女性" },
-    { rarity: 5, name: "シデロカ", job: "前衛", race: "ミノス", block: "1", limited: "配布(イベ)", origin: "ミノス", weapon: "大剣", gender: "女性" },
-    { rarity: 5, name: "エアースカーペット", job: "前衛", race: "カウタス", block: "2", limited: "恒常", origin: "リム・ビリトン", weapon: "剣(電気)", gender: "男性" },
-    { rarity: 5, name: "ウィスラッシュ", job: "前衛", race: "クランタ", block: "2", limited: "配布(イベ)", origin: "カジミエーシュ", weapon: "鞭刃", gender: "女性" },
-    { rarity: 5, name: "アカフユ", job: "前衛", race: "エーギル", block: "1", limited: "恒常", origin: "東", weapon: "刀", gender: "女性" },
-    { rarity: 5, name: "ラ・プルマ", job: "前衛", race: "リーベリ", block: "2", limited: "恒常", origin: "ボリバル", weapon: "大鎌", gender: "女性" },
-    { rarity: 5, name: "テキーラ", job: "前衛", race: "ペロ", block: "2", limited: "配布(イベ)", origin: "ボリバル", weapon: "剣(爆発)", gender: "男性" },
-    { rarity: 5, name: "ハイモア", job: "前衛", race: "エーギル", block: "2", limited: "配布(メイン)", origin: "エーギル", weapon: "鎌", gender: "女性" },
-    { rarity: 5, name: "ダグザ", job: "前衛", race: "フェリーン", block: "1", limited: "配布(イベ)", origin: "ヴィクトリア", weapon: "ナックル", gender: "女性" },
-    { rarity: 5, name: "モーガン", job: "前衛", race: "フェリーン", block: "1", limited: "配布(メイン)", origin: "ヴィクトリア", weapon: "ナックル", gender: "女性" },
-    { rarity: 5, name: "ウインドチャイム", job: "前衛", race: "フォルテ", block: "1", limited: "恒常", origin: "炎国", weapon: "巨大な杵", gender: "女性" },
-    { rarity: 5, name: "チューバイ", job: "前衛", race: "フェリーン", block: "2", limited: "恒常", origin: "炎国", weapon: "剣", gender: "女性" },
-    { rarity: 5, name: "レスイング", job: "前衛", race: "カプリニー", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "剣", gender: "男性" },
-    { rarity: 5, name: "リスカム", job: "重装", race: "ヴイーヴル", block: "3", limited: "恒常", origin: "ブラックスチール", weapon: "銃/盾", gender: "女性" },
-    { rarity: 5, name: "クロワッサン", job: "重装", race: "ミノス", block: "3", limited: "恒常", origin: "ミノス", weapon: "ハンマー/盾", gender: "女性" },
-    { rarity: 5, name: "ヴァルカン", job: "重装", race: "ミノス", block: "3", limited: "恒常", origin: "ミノス", weapon: "義手/盾", gender: "女性" },
-    { rarity: 5, name: "ニアール", job: "重装", race: "クランタ", block: "3", limited: "恒常", origin: "カジミエーシュ", weapon: "盾/メイス", gender: "女性" },
-    { rarity: 5, name: "バイソン", job: "重装", race: "フェリーン", block: "3", limited: "配布(イベ)", origin: "龍門", weapon: "盾", gender: "男性" },
-    { rarity: 5, name: "ウン", job: "重装", race: "ペロ", block: "3", limited: "恒常", origin: "龍門", weapon: "盾/武器", gender: "男性" },
-    { rarity: 5, name: "アスベストス", job: "重装", race: "サルカズ", block: "3", limited: "恒常", origin: "リム・ビリトン", weapon: "扉(盾)", gender: "女性" },
-    { rarity: 5, name: "ヘビーレイン", job: "重装", race: "クランタ", block: "3", limited: "配布(イベ)", origin: "サルゴン", weapon: "盾/武器", gender: "女性" },
-    { rarity: 5, name: "アッシュロック", job: "重装", race: "ザラック", block: "3", limited: "恒常", origin: "カジミエーシュ", weapon: "銃槍/盾", gender: "女性" },
-    { rarity: 5, name: "シャレム", job: "重装", race: "ヴイーヴル", block: "3", limited: "配布(メイン)", origin: "ヴィクトリア", weapon: "銃/盾", gender: "男性" },
-    { rarity: 5, name: "ファイヤーホイッスル", job: "重装", race: "リベリ", block: "3", limited: "恒常", origin: "リベリ", weapon: "銃/盾", gender: "女性" },
-    { rarity: 5, name: "チェルニー", job: "重装", race: "エラフィア", block: "3", limited: "配布(イベ)", origin: "ライタニエン", weapon: "コントラバス", gender: "男性" },
-    { rarity: 5, name: "セメント", job: "重装", race: "アーケソリア", block: "3", limited: "恒常", origin: "リム・ビリトン", weapon: "掘削盾", gender: "女性" },
-    { rarity: 5, name: "ベースライン", job: "重装", race: "エラフィア", block: "3", limited: "配布(イベ)", origin: "ライタニエン", weapon: "盾", gender: "男性" }
-];
+const operators = {
+    6: [
+        { name: "ウィシャデル", job: "狙撃", race: "サルカズ", block: "1", limited: "限定", origin: "カズデル", weapon: "ランチャー", gender: "女" },
+        { name: "ムリナール", job: "前衛", race: "クランタ", block: "0〜3", limited: "恒常", origin: "カジミエーシュ", weapon: "剣", gender: "男" },
+        { name: "血掟テキサス", job: "特殊", race: "ループス", block: "1", limited: "限定", origin: "シラクーザ", weapon: "双剣", gender: "女" },
+        { name: "ロゴス", job: "術師", race: "サルカズ", block: "1", limited: "恒常", origin: "カズデル", weapon: "筆(アーツ)", gender: "男" },
+        { name: "シュウ", job: "重装", race: "龍", block: "3", limited: "限定", origin: "炎", weapon: "鎌/農具", gender: "女" },
+        { name: "ティフォン", job: "狙撃", race: "サルカズ", block: "1", limited: "恒常", origin: "サーミ", weapon: "弓銃", gender: "女" },
+        { name: "ウルピアヌス", job: "前衛", race: "エーギル", block: "2", limited: "恒常", origin: "エーギル", weapon: "錨", gender: "男" },
+        { name: "純燼エイヤフィヤトラ", job: "医療", race: "カプロニ", block: "1", limited: "限定", origin: "レム・ビリトン", weapon: "杖", gender: "女" },
+        { name: "焔影リード", job: "術師", race: "ドラコ", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "槍/杖", gender: "女" },
+        { name: "デーゲンブレヒャー", job: "前衛", race: "クランタ", block: "2", limited: "恒常", origin: "イェラグ", weapon: "双剣", gender: "女" },
+        { name: "キリンRヤトウ", job: "特殊", race: "オニ", block: "1", limited: "限定", origin: "東", weapon: "双剣", gender: "女" },
+        { name: "ミュルジス", job: "先鋒", race: "エルフ", block: "1", limited: "限定", origin: "ライン生命", weapon: "水の分身", gender: "女" },
+        { name: "ペナンス", job: "重装", race: "ループス", block: "3", limited: "恒常", origin: "シラクーザ", weapon: "裁判官の槌", gender: "女" },
+        { name: "ホルハイヤ", job: "術師", race: "リベリ", block: "1", limited: "恒常", origin: "コロンビア", weapon: "杖", gender: "女" },
+        { name: "ヴィヴィアナ", job: "前衛", race: "ディア（鹿）", block: "1", limited: "恒常", origin: "カジミエーシュ", weapon: "光の剣", gender: "女" },
+        { name: "レイ", job: "狙撃", race: "イトラ", block: "1", limited: "恒常", origin: "リム・ビリトン", weapon: "サンドボード", gender: "女" },
+        { name: "イネス", job: "先鋒", race: "サルカズ", block: "1", limited: "恒常", origin: "カズデル", weapon: "影の短剣", gender: "女" },
+        { name: "遊龍チェン", job: "狙撃", race: "龍", block: "1", limited: "限定", origin: "龍門", weapon: "水鉄砲", gender: "女" },
+        { name: "濁心スカジ", job: "補助", race: "エーギル", block: "1", limited: "限定", origin: "エーギル", weapon: "杖", gender: "女" },
+        { name: "帰溟スペクター", job: "特殊", race: "エーギル", block: "2", limited: "限定", origin: "エーギル", weapon: "回転ノコギリ", gender: "女" },
+        { name: "百錬ガヴィル", job: "前衛", race: "アーコス", block: "2", limited: "限定", origin: "アカフラ", weapon: "巨大斧", gender: "女" },
+        { name: "チョンユエ", job: "前衛", race: "龍", block: "1", limited: "限定", origin: "炎", weapon: "拳", gender: "男" },
+        { name: "ヤトウ(通常)", job: "先鋒", race: "オニ", block: "2", limited: "恒常", origin: "東", weapon: "刀", gender: "女" },
+        { name: "スルト", job: "前衛", race: "サルカズ", block: "1", limited: "恒常", origin: "不明", weapon: "魔剣", gender: "女" },
+        { name: "ソーンズ", job: "前衛", race: "エーギル", block: "2", limited: "恒常", origin: "イベリア", weapon: "剣(デストレッツァ)", gender: "男" },
+        { name: "サリア", job: "重装", race: "ヴイーヴル", block: "3", limited: "恒常", origin: "ライン生命", weapon: "盾", gender: "女" },
+        { name: "バグパイプ", job: "先鋒", race: "ヴイーヴル", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "破城砲槍", gender: "女" },
+        { name: "シルバーアッシュ", job: "前衛", race: "フェリーン", block: "2", limited: "恒常", origin: "イェラグ", weapon: "仕込み杖", gender: "男" },
+        { name: "エクシア", job: "狙撃", race: "サンクタ", block: "1", limited: "恒常", origin: "ラテラーノ", weapon: "短機関銃", gender: "女" },
+        { name: "エイヤフィヤトラ", job: "術師", race: "カプロニ", block: "1", limited: "恒常", origin: "レム・ビリトン", weapon: "杖", gender: "女" },
+        { name: "ニンフ", job: "術師", race: "サルカズ", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "針/糸", gender: "女" },
+        { name: "ぺぺ", job: "前衛", race: "フェリーン", block: "2", limited: "限定", origin: "サルゴン", weapon: "大槌", gender: "女" },
+        { name: "ゾフィア", job: "前衛", race: "クランタ", block: "2", limited: "恒常", origin: "カジミエーシュ", weapon: "剣/盾", gender: "女" },
+        { name: "ズオ・ラウ", job: "前衛", race: "龍", block: "1", limited: "恒常", origin: "炎", weapon: "刀", gender: "男" },
+        { name: "ニェン", job: "重装", race: "龍", block: "3", limited: "限定", origin: "炎", weapon: "盾/大剣", gender: "女" },
+        { name: "シー", job: "術師", race: "龍", block: "1", limited: "限定", origin: "炎", weapon: "筆(剣)", gender: "女" },
+        { name: "リィン", job: "補助", race: "龍", block: "1", limited: "限定", origin: "炎", weapon: "盃/剣", gender: "女" },
+        { name: "アスカロン", job: "特殊", race: "サルカズ", block: "0", limited: "恒常", origin: "カズデル", weapon: "隠し刃", gender: "女" },
+        { name: "Ela", job: "狙撃", race: "人間", block: "1", limited: "限定", origin: "地球(コラボ)", weapon: "銃/地雷", gender: "女" },
+        { name: "ドロシー", job: "特殊", race: "ザラック", block: "1", limited: "恒常", origin: "ライン生命", weapon: "罠", gender: "女" },
+        { name: "フィアメッタ", job: "狙撃", race: "リベリ", block: "1", limited: "恒常", origin: "ラテラーノ", weapon: "榴弾発射器", gender: "女" },
+        { name: "ゴールデングロー", job: "術師", race: "フェリーン", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "杖(ハサミ)", gender: "女" },
+        { name: "ノーシス", job: "補助", race: "リベリ", block: "1", limited: "恒常", origin: "イェラグ", weapon: "杖", gender: "男" },
+        { name: "ファントム", job: "特殊", race: "フェリーン", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "短剣", gender: "男" },
+        { name: "スカジ", job: "前衛", race: "エーギル", block: "1", limited: "恒常", origin: "エーギル", weapon: "大剣", gender: "女" },
+        { name: "ケルシー", job: "医療", race: "フェリーン", block: "1", limited: "恒常", origin: "不明", weapon: "Mon3tr", gender: "女" },
+        { name: "マドロック", job: "重装", race: "サルカズ", block: "3", limited: "恒常", origin: "カズデル", weapon: "大槌", gender: "女" },
+        { name: "マウンテン", job: "前衛", race: "フェリーン", block: "2", limited: "恒常", origin: "コロンビア", weapon: "拳", gender: "男" },
+        { name: "ホシグマ", job: "重装", race: "オニ", block: "3", limited: "恒常", origin: "龍門", weapon: "般若(盾)", gender: "女" },
+        { name: "チェン", job: "前衛", race: "龍", block: "2", limited: "恒常", origin: "龍門", weapon: "赤霄(刀)", gender: "女" },
+        { name: "耀騎士ニアール", job: "前衛", race: "クランタ", block: "1", limited: "限定", origin: "カジミエーシュ", weapon: "ランス", gender: "女" },
+        { name: "サイラッハ", job: "先鋒", race: "ヴイーヴル", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "旗/剣", gender: "女" },
+        { name: "フレイムテイル", job: "先鋒", race: "ザラック", block: "2", limited: "恒常", origin: "カジミエーシュ", weapon: "剣", gender: "女" },
+        { name: "パゼオンカ", job: "狙撃", race: "ループス", block: "1", limited: "恒常", origin: "ウルサス", weapon: "弩", gender: "女" },
+        { name: "ステインレス", job: "補助", race: "フェリーン", block: "2", limited: "恒常", origin: "ヴィクトリア", weapon: "ハンマー", gender: "男" },
+        { name: "ホルン", job: "重装", race: "ループス", block: "3", limited: "恒常", origin: "ヴィクトリア", weapon: "砲槍", gender: "女" },
+        { name: "アイリーニ", job: "前衛", race: "リベリ", block: "2", limited: "恒常", origin: "イベリア", weapon: "剣/ハンドガン", gender: "女" },
+        { name: "ルーメン", job: "医療", race: "エーギル", block: "1", limited: "配布", origin: "イベリア", weapon: "ランタン", gender: "男" },
+        { name: "ミヅキ", job: "特殊", race: "エーギル", block: "1", limited: "恒常", origin: "東", weapon: "触手", gender: "男" },
+        { name: "パラス", job: "前衛", race: "ミノス", block: "2", limited: "恒常", origin: "ミノス", weapon: "鞭槍", gender: "女" },
+        { name: "カーネリアン", job: "術師", race: "カプリニー", block: "1", limited: "恒常", origin: "サルゴン", weapon: "杖", gender: "女" },
+        { name: "アルケット", job: "狙撃", race: "リベリ", block: "1", limited: "恒常", origin: "ラテラーノ", weapon: "弓", gender: "女" },
+        { name: "ロスモンティス", job: "狙撃", race: "フェリーン", block: "1", limited: "限定", origin: "ライン生命", weapon: "思念体(盾)", gender: "女" },
+        { name: "ブレミシャイン", job: "重装", race: "クランタ", block: "3", limited: "恒常", origin: "カジミエーシュ", weapon: "剣/盾", gender: "女" },
+        { name: "ユーネクテス", job: "重装", race: "ピュティア", block: "1", limited: "恒常", origin: "アカフラ", weapon: "巨大メカ", gender: "女" },
+        { name: "ウィーディ", job: "特殊", race: "エーギル", block: "2", limited: "恒常", origin: "イベリア", weapon: "液体窒素砲", gender: "女" },
+        { name: "スズラン", job: "補助", race: "ヴイーヴル", block: "1", limited: "恒常", origin: "東", weapon: "杖", gender: "女" },
+        { name: "ケオベ", job: "術師", race: "ペッロー", block: "1", limited: "恒常", origin: "ミノス", weapon: "投げナイフ", gender: "女" },
+        { name: "モスティマ", job: "術師", race: "サンクタ", block: "1", limited: "恒常", origin: "ラテラーノ", weapon: "杖(時杖)", gender: "女" },
+        { name: "シュヴァルツ", job: "狙撃", race: "フェリーン", block: "1", limited: "恒常", origin: "シエスタ", weapon: "大型弩", gender: "女" }
+    ],
+    5: [
+        { name: "アーミヤ", job: "術師/前衛", race: "コータス", block: "1", limited: "配布", origin: "カズデル", weapon: "指輪/剣", gender: "女" },
+        { name: "テキサス", job: "先鋒", race: "ループス", block: "2", limited: "恒常", origin: "シラクーザ", weapon: "双剣", gender: "女" },
+        { name: "ラップランド", job: "前衛", race: "ループス", block: "2", limited: "恒常", origin: "シラクーザ", weapon: "双剣", gender: "女" },
+        { name: "フィリオプシス", job: "医療", race: "リベリ", block: "1", limited: "恒常", origin: "ライン生命", weapon: "杖", gender: "女" },
+        { name: "スペクター", job: "前衛", race: "エーギル", block: "3", limited: "恒常", origin: "エーギル", weapon: "回転ノコギリ", gender: "女" },
+        { name: "プラチナ", job: "狙撃", race: "クランタ", block: "1", limited: "恒常", origin: "カジミエーシュ", weapon: "弓", gender: "女" },
+        { name: "メテオリーテ", job: "狙撃", race: "サルカズ", block: "1", limited: "恒常", origin: "カズデル", weapon: "擲弾筒", gender: "女" },
+        { name: "スカイフレア", job: "術師", race: "フェリーン", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "杖", gender: "女" },
+        { name: "リスカム", job: "重装", race: "ヴイーヴル", block: "3", limited: "恒常", origin: "BS", weapon: "拳銃/盾", gender: "女" },
+        { name: "フランカ", job: "前衛", race: "ヴイーヴル", block: "1", limited: "恒常", origin: "BS", weapon: "レイピア", gender: "女" },
+        { name: "クロワッサン", job: "重装", race: "ミノス", block: "3", limited: "恒常", origin: "ミノス", weapon: "ハンマー/盾", gender: "女" },
+        { name: "ソラ", job: "補助", race: "記載なし", block: "1", limited: "恒常", origin: "龍門", weapon: "マイク", gender: "女" },
+        { name: "ズィマ", job: "先鋒", race: "ウルサス", block: "2", limited: "恒常", origin: "ウルサス", weapon: "斧", gender: "女" },
+        { name: "イスティーナ", job: "補助", race: "ウルサス", block: "1", limited: "恒常", origin: "ウルサス", weapon: "本", gender: "女" },
+        { name: "グム", job: "重装", race: "ウルサス", block: "3", limited: "恒常", origin: "ウルサス", weapon: "フライパン/盾", gender: "女" },
+        { name: "ニアール", job: "重装", race: "クランタ", block: "3", limited: "恒常", origin: "カジミエーシュ", weapon: "槌矛/盾", gender: "女" },
+        { name: "レッド", job: "特殊", race: "ループス", block: "1", limited: "恒常", origin: "不明", weapon: "短剣", gender: "女" },
+        { name: "プラマニクス", job: "補助", race: "フェリーン", block: "1", limited: "恒常", origin: "イェラグ", weapon: "鈴", gender: "女" },
+        { name: "クリフハート", job: "特殊", race: "フェリーン", block: "1", limited: "恒常", origin: "イェラグ", weapon: "鉤縄", gender: "女" },
+        { name: "テンニンカ", job: "先鋒", race: "ドゥリン", block: "1", limited: "恒常", origin: "地下", weapon: "旗", gender: "女" },
+        { name: "エリジウム", job: "先鋒", race: "リベリ", block: "1", limited: "恒常", origin: "イベリア", weapon: "旗", gender: "男" },
+        { name: "カンタービレ", job: "先鋒", race: "リベリ", block: "1", limited: "恒常", origin: "記載なし", weapon: "短剣", gender: "女" },
+        { name: "アミヤ(前衛)", job: "前衛", race: "コータス", block: "1", limited: "配布", origin: "カズデル", weapon: "影の剣", gender: "女" },
+        { name: "シャマレ", job: "補助", race: "ヴイーヴル", block: "1", limited: "恒常", origin: "シラクーザ", weapon: "呪いの人形", gender: "女" },
+        { name: "カゼマル", job: "特殊", race: "フェリーン", block: "1", limited: "恒常", origin: "東", weapon: "刀/折り紙", gender: "女" },
+        { name: "エイプリル", job: "狙撃", race: "コータス", block: "1", limited: "恒常", origin: "リム・ビリトン", weapon: "弓", gender: "女" },
+        { name: "ラ・プルマ", job: "前衛", race: "リベリ", block: "2", limited: "恒常", origin: "ボリバル", weapon: "鎌", gender: "女" },
+        { name: "テキーラ", job: "前衛", race: "ペッロー", block: "2", limited: "配布", origin: "ボリバル", weapon: "大剣", gender: "男" },
+        { name: "ルナカブ", job: "狙撃", race: "ループス", block: "1", limited: "恒常", origin: "サーミ", weapon: "弓", gender: "女" },
+        { name: "アステシア", job: "前衛", race: "リベリ", block: "1", limited: "恒常", origin: "コロンビア", weapon: "剣", gender: "女" },
+        { name: "ワルファリン", job: "医療", race: "サルカズ", block: "1", limited: "恒常", origin: "カズデル", weapon: "杖", gender: "女" },
+        { name: "サイレンス", job: "医療", race: "リベリ", block: "1", limited: "恒常", origin: "ライン生命", weapon: "杖/ドローン", gender: "女" },
+        { name: "ウィスパーレイン", job: "医療", race: "エーギル", block: "1", limited: "恒常", origin: "イベリア", weapon: "杖/医学書", gender: "女" },
+        { name: "ハニーベリー", job: "医療", race: "ザラック", block: "1", limited: "交換", origin: "リム・ビリトン", weapon: "杖", gender: "女" },
+        { name: "マルベリー", job: "医療", race: "リベリ", block: "1", limited: "恒常", origin: "炎", weapon: "杖", gender: "女" },
+        { name: "バイビーク", job: "前衛", race: "リベリ", block: "2", limited: "交換", origin: "ミノス", weapon: "双剣", gender: "女" },
+        { name: "シーン", job: "補助", race: "ピュティア", block: "1", limited: "交換", origin: "記載なし", weapon: "カメラ", gender: "女" },
+        { name: "シャレム", job: "前衛", race: "ピュティア", block: "2", limited: "配布", origin: "ヴィクトリア", weapon: "剣", gender: "男" },
+        { name: "ヘビーレイン", job: "重装", race: "クランタ", block: "3", limited: "配布", origin: "サルゴン", weapon: "盾/剣", gender: "女" },
+        { name: "トギフォンス", job: "狙撃", race: "ヴイーヴル", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "大弓", gender: "女" },
+        { name: "アンドレアナ", job: "狙撃", race: "エーギル", block: "1", limited: "恒常", origin: "イベリア", weapon: "銃付クロスボウ", gender: "女" },
+        { name: "オーロラ", job: "重装", race: "ウルサス", block: "1", limited: "恒常", origin: "イェラグ", weapon: "盾/アーム", gender: "女" },
+        { name: "ブラックナイト", job: "先鋒", race: "サルカズ", block: "1", limited: "恒常", origin: "リム・ビリトン", weapon: "笛/弩", gender: "女" },
+        { name: "クエルクス", job: "補助", race: "フォルテ", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "杖", gender: "女" },
+        { name: "ハイディ", job: "補助", race: "人間", block: "1", limited: "配布", origin: "ヴィクトリア", weapon: "紙", gender: "女" },
+        { name: "ロックロック", job: "術師", race: "フェリーン", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "浮遊ユニット", gender: "女" },
+        { name: "ウインドフレア", job: "補助", race: "フェリーン", block: "2", limited: "恒常", origin: "ヴィクトリア", weapon: "巨大レンチ", gender: "男" },
+        { name: "承曦グレイ", job: "狙撃", race: "ペッロー", block: "1", limited: "恒常", origin: "ボリバル", weapon: "投擲武器", gender: "男" },
+        { name: "パプリカ", job: "医療", race: "サルカズ", block: "1", limited: "恒常", origin: "カズデル", weapon: "杖", gender: "女" }
+    ]
+};
 
 let currentPool = [];
 let currentOp = {};
 
 function startQuiz(rarity) {
-    currentPool = operators.filter(op => op.rarity === rarity);
+    currentPool = operators[rarity];
     document.getElementById('mode-select').style.display = 'none';
     document.getElementById('quiz-area').style.display = 'block';
     document.getElementById('quiz-title').innerText = `★${rarity} オペレータークイズ`;
