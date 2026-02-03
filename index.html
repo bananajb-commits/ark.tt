@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARKNIGHTS OPERATOR QUIZ</title>
+    <title>アークナイツ オペレーター診断</title>
     <style>
         :root {
             --star6-color: #ff9d00;
@@ -16,7 +16,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Helvetica Neue', Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
             background-color: var(--bg-dark);
             background-image: 
                 radial-gradient(circle at 50% 50%, #1a1f25 0%, #0a0b0d 100%),
@@ -32,7 +32,7 @@
             overflow: hidden;
         }
 
-        /* ガラスモーフィズムのカード */
+        /* カードデザイン */
         .container {
             background: var(--panel-bg);
             backdrop-filter: blur(10px);
@@ -56,7 +56,6 @@
             font-size: 1.4rem;
             letter-spacing: 4px;
             margin-bottom: 25px;
-            text-transform: uppercase;
             color: #fff;
             text-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
@@ -74,7 +73,6 @@
             border-radius: 12px;
             border: none;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-transform: uppercase;
             letter-spacing: 2px;
         }
         .btn-star6 {
@@ -117,9 +115,8 @@
 
         .label {
             color: var(--accent-blue);
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: bold;
-            text-transform: uppercase;
             display: flex;
             align-items: center;
         }
@@ -132,7 +129,6 @@
         .value {
             color: #fff;
             font-weight: bold;
-            font-family: 'Courier New', Courier, monospace;
         }
 
         .hidden-val {
@@ -171,10 +167,9 @@
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: bold;
             transition: all 0.2s;
-            text-transform: uppercase;
         }
 
         .hint-btn:hover {
@@ -188,7 +183,7 @@
             background: rgba(255, 204, 0, 0.1);
             color: #ffcc00;
             border: 1px solid #ffcc00;
-            font-size: 1rem;
+            font-size: 1.1rem;
             margin-top: 10px;
         }
         .btn-reveal:hover {
@@ -205,9 +200,10 @@
             color: white;
             border: none;
             font-weight: 900;
-            font-size: 1rem;
+            font-size: 1.1rem;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0, 91, 181, 0.4);
+            cursor: pointer;
         }
         .btn-control:hover {
             background: #0078ee;
@@ -234,36 +230,36 @@
 <div class="container">
     <!-- モード選択画面 -->
     <div id="mode-select">
-        <h1>PRTS: Operator Database</h1>
-        <button class="rarity-btn btn-star6" onclick="startQuiz(6)">★6 Access</button>
-        <button class="rarity-btn btn-star5" onclick="startQuiz(5)">★5 Access</button>
+        <h1>PRTS: オペレーターデータベース</h1>
+        <button class="rarity-btn btn-star6" onclick="startQuiz(6)">★6 データベース接続</button>
+        <button class="rarity-btn btn-star5" onclick="startQuiz(5)">★5 データベース接続</button>
     </div>
 
     <!-- クイズ画面 -->
     <div id="quiz-area">
-        <h1 id="quiz-title">Operator Analysis</h1>
+        <h1 id="quiz-title">オペレーター解析中...</h1>
         <div class="display-panel" id="main-panel">
-            <div class="info-row"><span class="label">Class</span><span id="res-job" class="value hidden-val">？？？</span></div>
-            <div class="info-row"><span class="label">Race</span><span id="res-race" class="value hidden-val">？？？</span></div>
-            <div class="info-row"><span class="label">Gender</span><span id="res-gender" class="value hidden-val">？？？</span></div>
-            <div class="info-row"><span class="label">Block</span><span id="res-block" class="value hidden-val">？？？</span></div>
-            <div class="info-row"><span class="label">Availability</span><span id="res-limited" class="value hidden-val">？？？</span></div>
-            <div class="info-row"><span class="label">Origin</span><span id="res-origin" class="value hidden-val">？？？</span></div>
-            <div class="info-row"><span class="label">Weapon</span><span id="res-weapon" class="value hidden-val">？？？</span></div>
+            <div class="info-row"><span class="label">職種</span><span id="res-job" class="value hidden-val">？？？</span></div>
+            <div class="info-row"><span class="label">種族</span><span id="res-race" class="value hidden-val">？？？</span></div>
+            <div class="info-row"><span class="label">性別</span><span id="res-gender" class="value hidden-val">？？？</span></div>
+            <div class="info-row"><span class="label">ブロック数</span><span id="res-block" class="value hidden-val">？？？</span></div>
+            <div class="info-row"><span class="label">限定/恒常</span><span id="res-limited" class="value hidden-val">？？？</span></div>
+            <div class="info-row"><span class="label">出身地</span><span id="res-origin" class="value hidden-val">？？？</span></div>
+            <div class="info-row"><span class="label">武器</span><span id="res-weapon" class="value hidden-val">？？？</span></div>
             <div class="answer-box" id="res-name"></div>
         </div>
 
         <div class="button-grid">
-            <button class="hint-btn" onclick="reveal('job')">職種</button>
-            <button class="hint-btn" onclick="reveal('race')">種族</button>
-            <button class="hint-btn" onclick="reveal('gender')">性別</button>
-            <button class="hint-btn" onclick="reveal('block')">ブロック</button>
-            <button class="hint-btn" onclick="reveal('limited')">限定</button>
-            <button class="hint-btn" onclick="reveal('origin')">出身地</button>
-            <button class="hint-btn" onclick="reveal('weapon')">武器</button>
-            <button class="hint-btn btn-reveal" onclick="reveal('name')">IDENTIFY OPERATOR</button>
-            <button class="hint-btn btn-control" onclick="pickOperator()">NEXT TARGET</button>
-            <button class="hint-btn btn-control btn-back" onclick="backToMenu()">RETURN TO MENU</button>
+            <button class="hint-btn" onclick="reveal('job')">職種を表示</button>
+            <button class="hint-btn" onclick="reveal('race')">種族を表示</button>
+            <button class="hint-btn" onclick="reveal('gender')">性別を表示</button>
+            <button class="hint-btn" onclick="reveal('block')">ブロックを表示</button>
+            <button class="hint-btn" onclick="reveal('limited')">限定か表示</button>
+            <button class="hint-btn" onclick="reveal('origin')">出身地を表示</button>
+            <button class="hint-btn" onclick="reveal('weapon')">武器を表示</button>
+            <button class="hint-btn btn-reveal" onclick="reveal('name')">オペレーターを特定</button>
+            <button class="hint-btn btn-control" onclick="pickOperator()">次の対象をスキャン</button>
+            <button class="hint-btn btn-control btn-back" onclick="backToMenu()">メニューに戻る</button>
         </div>
     </div>
 </div>
@@ -279,7 +275,7 @@ const operators = {
         { name: "ティフォン", job: "狙撃", race: "サルカズ", block: "1", limited: "恒常", origin: "サーミ", weapon: "弓銃", gender: "女" },
         { name: "ウルピアヌス", job: "前衛", race: "エーギル", block: "2", limited: "恒常", origin: "エーギル", weapon: "錨", gender: "男" },
         { name: "純燼エイヤフィヤトラ", job: "医療", race: "カプロニ", block: "1", limited: "限定", origin: "レム・ビリトン", weapon: "杖", gender: "女" },
-        { name: "焔影リード", job: "医療", race: "ドラコ", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "槍/杖", gender: "女" },
+        { name: "焔影リード", job: "術師", race: "ドラコ", block: "1", limited: "恒常", origin: "ヴィクトリア", weapon: "槍/杖", gender: "女" },
         { name: "デーゲンブレヒャー", job: "前衛", race: "クランタ", block: "2", limited: "恒常", origin: "イェラグ", weapon: "双剣", gender: "女" },
         { name: "キリンRヤトウ", job: "特殊", race: "オニ", block: "1", limited: "限定", origin: "東", weapon: "双剣", gender: "女" },
         { name: "ミュルジス", job: "先鋒", race: "エルフ", block: "1", limited: "限定", origin: "ライン生命", weapon: "水の分身", gender: "女" },
@@ -337,7 +333,7 @@ const operators = {
         { name: "ブレミシャイン", job: "重装", race: "クランタ", block: "3", limited: "恒常", origin: "カジミエーシュ", weapon: "剣/盾", gender: "女" },
         { name: "ユーネクテス", job: "重装", race: "ピュティア", block: "1", limited: "恒常", origin: "アカフラ", weapon: "巨大メカ", gender: "女" },
         { name: "ウィーディ", job: "特殊", race: "エーギル", block: "2", limited: "恒常", origin: "イベリア", weapon: "液体窒素砲", gender: "女" },
-        { name: "スズラン", job: "補助", race: "ヴァルポ", block: "1", limited: "恒常", origin: "東", weapon: "杖", gender: "女" },
+        { name: "スズラン", job: "補助", race: "ヴイーヴル", block: "1", limited: "恒常", origin: "東", weapon: "杖", gender: "女" },
         { name: "ケオベ", job: "術師", race: "ペッロー", block: "1", limited: "恒常", origin: "ミノス", weapon: "投げナイフ", gender: "女" },
         { name: "モスティマ", job: "術師", race: "サンクタ", block: "1", limited: "恒常", origin: "ラテラーノ", weapon: "杖(時杖)", gender: "女" },
         { name: "シュヴァルツ", job: "狙撃", race: "フェリーン", block: "1", limited: "恒常", origin: "シエスタ", weapon: "大型弩", gender: "女" }
@@ -403,7 +399,7 @@ function startQuiz(rarity) {
     document.body.className = rarity === 6 ? 'theme-star6' : 'theme-star5';
     document.getElementById('mode-select').style.display = 'none';
     document.getElementById('quiz-area').style.display = 'block';
-    document.getElementById('quiz-title').innerText = `★${rarity} Operator Analysis`;
+    document.getElementById('quiz-title').innerText = `★${rarity} オペレーター解析`;
     pickOperator();
 }
 
